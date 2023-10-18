@@ -6,19 +6,24 @@
     else
         Run "calc"
 }
-; Ctrl-Alt-N - запустить Блокнот
+; Ctrl-Alt-N - добавить в заметку
 ^!N::
 {
-    File := EnvGet("USERPROFILE") . "\Documents\" . FormatTime(,"yyyy-MM-dd") . ".md"
-    if WinActive("ahk_exe notepad.exe")
-        WinClose
-    else if WinExist("ahk_exe notepad.exe")
-        WinActivate
-    else if FileExist(File)
-        Run "notepad " . File
-    else
-        Run "notepad"
+    MyGui := Gui("-MaximizeBox -MinimizeBox", "Записать:")
+    MainEdit := MyGui.Add("Edit", "vMainEdit W600 R20")
+    MyGui.OnEvent("Escape", MyGui_Escape)
+    MyGui_Escape(thisGui) 
+    {
+        Saved := MyGui.Submit()
+        File := EnvGet("USERPROFILE") . "\Documents\" . FormatTime(,"yyyy-MM-dd") . ".md"
+        if FileExist(File)
+            FileAppend "`n" . Saved.MainEdit, File, "UTF-8"
+        else
+            FileAppend Saved.MainEdit, File, "UTF-8"
+    }
+    MyGui.Show()
 }
+
 ; Ctrl-Alt-P - запустить PowerShell
 ^!P::
 {
@@ -103,5 +108,5 @@
 :*:;wmail::i.erokhin@gle.ru
 :*:;shrug::¯\_(ツ)_/¯
 
-; Cheat sheet
-#^I::MsgBox "Ctrl-Alt-C - Calculator`nCtrl-Alt-N - Notepad`nCtrl-Alt-T - Terminal`nCtrl-Win-0,1...9 - Volume level`nCtrl-Alt-3,9,0 - #[]`ntoday, mail, wmail, shrug", "Info"
+; Ctrl-Win-I - Cheat sheet
+#^I::MsgBox "Ctrl-Alt-C - Calculator`nCtrl-Alt-N - Заметка`nCtrl-Alt-T - Terminal`nCtrl-Win-0,1...9 - Volume level`nCtrl-Alt-3,9,0 - #[]`ntoday, mail, wmail, shrug", "Info"
