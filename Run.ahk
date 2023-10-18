@@ -10,6 +10,7 @@
 ^!N::
 {
     MyGui := Gui("-MaximizeBox -MinimizeBox", "Записать:")
+    MyGui.SetFont("S10 Q5", "Consolas")
     MainEdit := MyGui.Add("Edit", "vMainEdit W600 R20")
     MyGui.OnEvent("Escape", MyGui_Escape)
     MyGui_Escape(thisGui) 
